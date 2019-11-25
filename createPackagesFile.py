@@ -53,7 +53,8 @@ for controlFile in controlFiles:
                 packageName = line.replace('Package: ', '').rstrip()
             elif line.startswith('Version'):
                 packageName += '_' + line.replace('Version: ', '').rstrip() + '*.deb'
-                line = line.rstrip() + '-vod' + os.linesep
+                line = line.replace(version + ')', version + EXT + ')')
+                line = re.sub('\\)' + EXT + '$', ')', line) + os.linesep
             elif line.startswith('Homepage: '):
                 packageFile.write(line)
                 line = 'Filename: pool/n/ng/' + packageName.replace('*.deb', EXT + '_amd64.deb') + os.linesep
