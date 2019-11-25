@@ -70,8 +70,10 @@ for controlFile in controlFiles:
                     print(packageName)
                     debianPackages = glob.glob(packageName)
                     for debianPackage in debianPackages:
-                        debianPackageDest = debianPackage.replace(packageType, EXT + packageType)
-                        os.rename(debianPackage, debianPackageDest)
+                        if not debianPackage.endswith(EXT + packageType):
+                            debianPackageDest = debianPackage.replace(packageType, EXT + packageType)
+                            os.rename(debianPackage, debianPackageDest)
+
                         packageFile.write('SHA1: ' + fileDigest(debianPackageDest, 'sha1') + os.linesep)
                         packageFile.write('SHA256: ' + fileDigest(debianPackageDest, 'sha256') + os.linesep)
                         packageFile.write('MD5sum: ' + fileDigest(debianPackageDest, 'md5') + os.linesep)
