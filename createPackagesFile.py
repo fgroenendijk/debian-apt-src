@@ -58,18 +58,19 @@ for controlFile in controlFiles:
             elif line.startswith('Homepage: '):
                 debianPackages = glob.glob(packageName)
                 for debianPackage in debianPackages:
-                    if debianPackage.endswith('_amd64.deb'):
+                    packageType = re.sub('(_[^.]+.deb)', '\\1', debianPackage)
+                    if EXT in debianPackage:
                         packageFile.write(line)
-                        line = 'Filename: pool/n/ng/' + packageName.replace('*.deb', EXT + '_amd64.deb') + os.linesep
-                    elif debianPackage.endswith('_all.deb'):
+                        line = 'Filename: pool/n/ng/' + packageName.replace('*.deb', packageType) + os.linesep
+                    else:
                         packageFile.write(line)
-                        line = 'Filename: pool/n/ng/' + packageName.replace('*.deb', EXT + '_all.deb') + os.linesep
+                        line = 'Filename: pool/n/ng/' + packageName.replace('*.deb', EXT + packageType) + os.linesep
             elif line.startswith('Description: '):
                 if packageName:
                     print(packageName)
                     debianPackages = glob.glob(packageName)
                     for debianPackage in debianPackages:
-                        debianPackageDest = debianPackage.replace('_amd64.deb', '-vod_amd64.deb')
+                        debianPackageDest = debianPackage.replace(packageType, EXT + packageType)
                         os.rename(debianPackage, debianPackageDest)
                         packageFile.write('SHA1: ' + fileDigest(debianPackageDest, 'sha1') + os.linesep)
                         packageFile.write('SHA256: ' + fileDigest(debianPackageDest, 'sha256') + os.linesep)
