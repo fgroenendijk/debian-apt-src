@@ -56,9 +56,14 @@ for controlFile in controlFiles:
                 line = line.replace(version + ')', version + EXT + ')')
                 line = re.sub('\\)' + EXT + '$', ')', line) + os.linesep
             elif line.startswith('Homepage: '):
-                packageFile.write(line)
-                line = 'Filename: pool/n/ng/' + packageName.replace('*.deb', EXT + '_amd64.deb') + os.linesep
-                print('Added filename: ' + line
+                debianPackages = glob.glob(packageName)
+                for debianPackage in debianPackages:
+                    if debianPackage.endswith('_amd64.deb'):
+                        packageFile.write(line)
+                        line = 'Filename: pool/n/ng/' + packageName.replace('*.deb', EXT + '_amd64.deb') + os.linesep
+                    elif debianPackage.endswith('_all.deb'):
+                        packageFile.write(line)
+                        line = 'Filename: pool/n/ng/' + packageName.replace('*.deb', EXT + '_all.deb') + os.linesep
             elif line.startswith('Description: '):
                 if packageName:
                     print(packageName)
