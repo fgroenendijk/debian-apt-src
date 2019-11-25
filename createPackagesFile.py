@@ -54,6 +54,10 @@ for controlFile in controlFiles:
             elif line.startswith('Version'):
                 packageName += '_' + line.replace('Version: ', '').rstrip() + '*.deb'
                 line = line.rstrip() + '-vod' + os.linesep
+            elif line.startswith('Homepage: '):
+                packageFile.write(line)
+                line = 'Filename: pool/n/ng/' + packageName.replace('*.deb', EXT + '_amd64.deb') + os.linesep
+                print('Added filename: ' + line
             elif line.startswith('Description: '):
                 if packageName:
                     print(packageName)
